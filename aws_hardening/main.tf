@@ -4,9 +4,13 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   bucket = var.cloudtrail_bucket_name
 }
 
-resource "aws_s3_bucket_acl" "cloudtrail_bucket_acl" {
+resource "aws_s3_bucket_public_access_block" "cloudtrail_public_block" {
   bucket = aws_s3_bucket.cloudtrail_bucket.id
-  acl    = "private"
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket_policy" "coudtrail_bucket_policy" {
