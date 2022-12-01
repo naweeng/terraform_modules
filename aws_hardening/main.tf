@@ -4,6 +4,11 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   bucket = var.cloudtrail_bucket_name
 }
 
+resource "aws_s3_bucket_acl" "cloudtrail_bucket_acl" {
+  bucket = aws_s3_bucket.cloudtrail_bucket.id
+  acl    = "private"
+}
+
 resource "aws_s3_bucket_policy" "coudtrail_bucket_policy" {
   bucket = aws_s3_bucket.cloudtrail_bucket.id
   policy = <<POLICY
@@ -51,7 +56,7 @@ resource "aws_cloudtrail" "management" {
 }
 
 resource "aws_sns_topic" "securityAlerts" {
-  name = "securityAlerts"
+  name = var.sns_topic_name
 }
 
 resource "aws_cloudwatch_event_rule" "vpcChangeAlert" {

@@ -25,3 +25,8 @@ variable "is_multi_region_trail" {
   default     = true
   description = "Specifies whether the trail is created in the current region or in all regions"
 }
+
+variable "sns_topic_name" {
+  type        = string
+  description = "SNS topic name"
+}
