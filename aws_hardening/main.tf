@@ -35,7 +35,7 @@ resource "aws_s3_bucket_policy" "coudtrail_bucket_policy" {
               "Service": "cloudtrail.amazonaws.com"
             },
             "Action": "s3:PutObject",
-            "Resource": "${aws_s3_bucket.cloudtrail_bucket.arn}/management/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
+            "Resource": "${aws_s3_bucket.cloudtrail_bucket.arn}/${var.s3_key_prefix}/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
             "Condition": {
                 "StringEquals": {
                     "s3:x-amz-acl": "bucket-owner-full-control"
@@ -53,7 +53,7 @@ resource "aws_cloudtrail" "management" {
   ]
   name                       = var.cloudtrail_name
   s3_bucket_name             = var.cloudtrail_bucket_name
-  s3_key_prefix              = "management"
+  s3_key_prefix              = var.s3_key_prefix
   is_organization_trail      = var.is_organization_trail
   is_multi_region_trail      = var.is_multi_region_trail
   enable_log_file_validation = true
@@ -63,8 +63,10 @@ resource "aws_sns_topic" "securityAlerts" {
   name = var.sns_topic_name
 }
 
+#To add sns subscription
+
 resource "aws_cloudwatch_event_rule" "vpcChangeAlert" {
-  name        = "vpcChangeAlert"
+  name        = var.vpc_change_rule_name
   description = "Alert if any critical changes are made to the VPC."
 
   event_pattern = <<EOF
@@ -80,7 +82,7 @@ EOF
 }
 
 resource "aws_cloudwatch_event_rule" "sgChangeAlert" {
-  name        = "sgChangeAlert"
+  name        = var.sg_change_rule_name
   description = "Alert if any critical changes are made to the Security Group."
 
   event_pattern = <<EOF
@@ -96,7 +98,7 @@ EOF
 }
 
 resource "aws_cloudwatch_event_rule" "s3ChangeAlert" {
-  name        = "s3ChangeAlert"
+  name        = var.s3_change_rule_name
   description = "Alert if any critical changes are made to S3"
 
   event_pattern = <<EOF

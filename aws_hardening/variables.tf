@@ -8,11 +8,11 @@ variable "cloudtrail_name" {
   description = "Cloudtrail Name"
 }
 
-# variable "s3_key_prefix" {
-#   type        = string
-#   description = "Prefix for S3 bucket used by Cloudtrail to store logs"
-#   default     = null
-# }
+variable "s3_key_prefix" {
+  type        = string
+  description = "Prefix for S3 bucket used by Cloudtrail to store logs"
+  default     = null
+}
 
 variable "is_organization_trail" {
   type        = bool
@@ -29,4 +29,19 @@ variable "is_multi_region_trail" {
 variable "sns_topic_name" {
   type        = string
   description = "SNS topic name"
+}
+
+variable "vpc_change_rule_name" {
+  type        = string
+  description = "EventBridge Rule Name for VPC change detection."
+}
+
+variable "sg_change_rule_name" {
+  type        = string
+  description = "EventBridge Rule Name for SG change detection."
+}
+
+variable "s3_change_rule_name" {
+  type        = string
+  description = "EventBridge Rule Name for S3 change detection."
 }
